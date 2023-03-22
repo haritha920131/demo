@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample UI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/sample.css}" />
+
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+               <div class="row">
+                   <h5 th:text="${loggedusername}"></h5>
+                   <span th:text="${loggeduserrole}"></span>
+               </div>
+                <a href="#" ><i class="fa-sharp fa-solid fa-power-off"></i></a>
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<!--
+<ul>
+    <li th:each="e : ${sampledata}" >
+        <span th:text="${e.name}"></span>
+    </li>
+</ul>
+-->
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-6">
+            <!--<form  action="/sample" method="POST" id="frmSample" enctype="multipart/form-data">-->
+            <form onsubmit="return false"  id="frmSample" >
+                <b>Name : </b><br>
+                <input type="text" name="name" required pattern="[A-Z][a-z]{3,10}" id="textName" placeholder="Enter Name"> <br>
+                <b>DOB : </b><br>
+                <input type="date" name="name" required  id="dteDOB" ><br>
+                <input type="date" name="name" required  id="dteadded" ><br>
+                <input type="text" name="name" required  id="dtetest" ><br>
+
+
+                <button type="submit"
+                        class="btn bg-success"
+                        onclick="buttonSubmit()" >Submit</button>
+            </form>
+        </div>
+        <div class="col-6">
+            <table class="table table-striped" id="tablesample">
+                <thead class="table-dark">
+                <tr>
+                    <th> # </th>
+                    <th> Name </th>
+                    <th> DOB </th>
+                    <th> Status </th>
+                    <th> Modify </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="e,dt : ${sampledata}">
+                    <td th:text="${dt.index +1}"></td>
+                    <td th:text="${e.name}"></td>
+                    <td th:text="${e.dob}"></td>
+                    <td>
+                        <p th:text="${e.test_id.name}" th:class="${e.test_id.name == 'Active'} ? 'bg-success text-center fw-bold rounded-pill' : 'bg-danger text-center fw-bold rounded-pill'"></p>
+
+                    </td>
+                    <td>
+                        <button th:id="${e.id}" class="btn btn-warning"
+
+                                onclick="formReFill(this.id)"> Edit </button>
+
+                        <button th:id="${e.id}" class="btn bg-danger"
+                                onclick="deleteRow(this.id)"> Delete </button>
+
+                        <button th:id="${e.id}" class="btn btn-info" onclick="ViewRow(this.id)"> View </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script th:inline="javascript">
+
+
+    function formReFill(obid){
+        console.log("Edit " , obid);
+    }
+    function deleteRow(obid){
+        console.log("Delete " , obid);
+    }
+    function ViewRow(obid){
+        console.log("View " , obid);
+    }
+
+
+    function buttonSubmit() {
+
+        objectsample = new Object();
+        objectsample.name = textName.value;
+        objectsample.dob = dteDOB.value;
+       objectsample.test_id = JSON.parse(selectStatus.value);
+
+        console.log(objectsample)
+        let responce = true;
+/*
+        $.ajax("/sample",{
+            async: false,
+            type: "POST",
+            data: JSON.stringify(objectsample),
+            timeout: 500,
+           contentType :'application/json',
+            success: function (data,status,ahr) {
+                console.log("Responce Success : ",status);
+                console.log("Responce Success : ",data);
+                responce = true;
+
+
+            },
+            error:function (ahr,status , errormsg) {
+                console.log("Responce Error : ", status);
+                console.log("Responce Error : ", ahr);
+
+            }
+        })
+*/
+        if (responce)
+            window.location.reload();
+    }
+
+    let table = new DataTable('#tablesample', {
+        responsive: true
+    });
+
+</script>
+
+
+
+</body>
+</html>

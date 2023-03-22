@@ -1,0 +1,9 @@
+.btnactive{
+
+    pointer-events: all;
+    cursor: pointer;
+}
+.btninactive{
+    pointer-events: all;
+    cursor: not-allowed;
+}
